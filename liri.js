@@ -20,7 +20,7 @@ var optsList = [
     'help'
 ];
 
-var helpText = "LIRI USAGE HELP: \n\n\
+var helpText = "\nLIRI USAGE HELP: \n\n\
     $ node liri <options> <argument>\n\n\
     Options:\n\
     \tconcert-this\n\
@@ -29,7 +29,7 @@ var helpText = "LIRI USAGE HELP: \n\n\
     \tdo-what-it-says\n\n\
     <argument> must be quoted for predictable behavior (i.e., \"Ace of Base\")\n";
 
-var argHelpText = "Quoted argument required with option (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")";
+var argHelpText = "\nQuoted argument required with option (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")\n";
 
 switch ( option ) {
     default:
@@ -58,15 +58,26 @@ switch ( option ) {
 }; // End switch
 
 function concertThis(artist) {
-    var bandsApiErrorText = "There was a little problem getting your concert info.\nPlease try again later, or try a different artist."
-    // Format user's search for query string
+    // Missing argument handling
+    if ( artist == null ) {
+        console.log(argHelpText.green);
+        return;
+    };
+
+    var bandsApiErrorText = "\nThere was a little problem getting your concert info.\nPlease try again later, or try a different artist.\n"
+
+    // Format user's search for use in query string
     artist = artist.split(' ').join('+');
+    
     var bandsApiQuery = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
 
+    // Bandsintown API request and response
     client.get(bandsApiQuery, function(error, response, body) {
-        if ( typeof body === "undefined" || error || response.statusCode != 200 ) {
+        if ( body.length === 0 || error || response.statusCode != 200 ) {
             console.log(bandsApiErrorText.green);
+            return;
         }
+
         var isLocal = true;
         var artistName = body[0].lineup[0];
         var venueLocal = body[0].venue.name + " in " + body[0].venue.city + ', ' + body[0].venue.region;
@@ -84,12 +95,12 @@ function concertThis(artist) {
             console.log("\tAt: " + venueLocal.magenta.bold + "\n");
         else if ( !isLocal )
             console.log("\tAt: " + venueIntl.magenta.bold + "\n");
-    });
+    }); // End client.get()
 
 }; // End concertThis() definition
 
 function spotifyThis(artist) {
-    console.log( 'spotify-this-song passed with argument ' + artist );
+
 };
 
 function movieThis(movieTitle) {
