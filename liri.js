@@ -55,38 +55,18 @@ switch ( option ) {
 }; // End switch
 
 function concertThis(artist) {
-    if ( typeof argument === 'undefined' ) {
-        console.log(argHelpText);
-        return;
-    }
-
     console.log( 'concert-this passed with argument ' + artist);
 };
 
 function spotifyThis(artist) {
-    if ( typeof argument === "undefined" ) {
-        console.log(argHelpText);
-        return;
-    }
-
     console.log( 'spotify-this-song passed with argument ' + artist );
 };
 
 function movieThis(movieTitle) {
-    if ( typeof argument === "undefined" ) {
-        console.log(argHelpText);
-        return;
-    }
-
     console.log( 'concert-this passed with argument ' + movieTitle );
 };
 
 function doWhatItSays(whatItSays) {
-    if ( typeof argument === 'undefined' ) {
-        console.log(argHelpText);
-        return;
-    }
-
     console.log( 'do-what-it-says passed with argument ' + whatItSays );
 };
 
