@@ -1,5 +1,6 @@
 require("dotenv").config();
 const keys = require('./keys.js');
+var request = require('request');
 var Spotify = require('node-spotify-api'); 
 var spotify = new Spotify(keys.spotify);
 
@@ -14,7 +15,7 @@ switch ( option ) {
     case 'spotify-this-song':
         spotifyThis(argument);
         break;
-        
+
     case 'movie-this':
         movieThis(argument);
         break;
@@ -22,22 +23,29 @@ switch ( option ) {
     case 'do-what-it-says':
         doWhatItSays(argument);
         break;
-};
+
+    case 'help':
+        displayHelp();
+        break;
+}; // End switch
 
 function concertThis(artist) {
-    console.log( 'concert-this passed' );
+    console.log( 'concert-this passed with argument ' + artist);
 
 }
 
 function spotifyThis(artist) {
-    console.log( 'spotify-this-song passed' );
+    console.log( 'spotify-this-song passed with argument ' + artist );
 
 }
 
 function movieThis(movieTitle) {
-    console.log( 'concert-this passed' );
+    console.log( 'concert-this passed with argument ' + movieTitle );
+
 }
 
 function doWhatItSays(whatItSays) {
-    console.log( 'do-what-it-says passed' );
+    console.log( 'do-what-it-says passed with argument ' + whatItSays );
+    
 }
+
