@@ -8,6 +8,14 @@ var spotify = new Spotify(keys.spotify);
 var option = process.argv[2];
 var argument = process.argv[3];
 
+var optsList = [
+    'concert-this',
+    'spotify-this-song',
+    'movie-this',
+    'do-what-it-says',
+    'help'
+];
+
 var helpText = "LIRI USAGE HELP: \n\n\
     $ node liri <options> <argument>\n\n\
     Options:\n\
@@ -15,9 +23,10 @@ var helpText = "LIRI USAGE HELP: \n\n\
     \tspotify-this-song\n\
     \tmovie-this\n\
     \tdo-what-it-says\n\n\
-    <argument> must be quoted (i.e., \"Ace of Base\")\n"
-var optHelpText = "<option requires an argument (i.e., $ liri concert-this \"Ace of Base\""
-var argHelpText = "<argument> must be quoted (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")"
+    <argument> must be quoted for predictable behavior (i.e., \"Ace of Base\")\n";
+
+var optHelpText = "<option requires an argument (i.e., $ liri concert-this \"Ace of Base\"";
+var argHelpText = "Quoted argument required with option (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")";
 
 switch ( option ) {
     default:
@@ -41,7 +50,7 @@ switch ( option ) {
         break;
 
     case 'help':
-        inputHelp();
+        inputHelp(argument);
         break;
 }; // End switch
 
@@ -52,7 +61,7 @@ function concertThis(artist) {
     }
 
     console.log( 'concert-this passed with argument ' + artist);
-}
+};
 
 function spotifyThis(artist) {
     if ( typeof argument === "undefined" ) {
@@ -61,7 +70,7 @@ function spotifyThis(artist) {
     }
 
     console.log( 'spotify-this-song passed with argument ' + artist );
-}
+};
 
 function movieThis(movieTitle) {
     if ( typeof argument === "undefined" ) {
@@ -70,7 +79,7 @@ function movieThis(movieTitle) {
     }
 
     console.log( 'concert-this passed with argument ' + movieTitle );
-}
+};
 
 function doWhatItSays(whatItSays) {
     if ( typeof argument === 'undefined' ) {
@@ -79,16 +88,13 @@ function doWhatItSays(whatItSays) {
     }
 
     console.log( 'do-what-it-says passed with argument ' + whatItSays );
-}
+};
 
-function inputHelp(argument) {
-    if ( !option && !argument )
+function inputHelp(arg) {
+    if ( !optsList.includes(arg) )
         console.log(helpText);
-    else if ( option != 'help' && !argument )
-        console.log(optHelpText);
-    else if ( option != 'help' && typeof argument === 'undefined' )
-        console.log(argHelpText)
-    else
-        console.log(helpText);
-}
+    
+    else if ( optsList.includes(arg) && !arg )
+        console.log(argHelpText);
+};
 
