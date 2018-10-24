@@ -20,6 +20,10 @@ var optHelpText = "<option requires an argument (i.e., $ liri concert-this \"Ace
 var argHelpText = "<argument> must be quoted (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")"
 
 switch ( option ) {
+    default:
+        inputHelp();
+        break;
+
     case 'concert-this':
         concertThis(argument);
         break;
@@ -34,10 +38,6 @@ switch ( option ) {
 
     case 'do-what-it-says':
         doWhatItSays(argument);
-        break;
-
-    default:
-        inputHelp();
         break;
 
     case 'help':
