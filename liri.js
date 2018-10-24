@@ -29,7 +29,7 @@ var helpText = "\nLIRI USAGE HELP: \n\n\
     \tdo-what-it-says\n\n\
     <argument> must be quoted for predictable behavior (i.e., \"Ace of Base\")\n";
 
-var argHelpText = "\nQuoted argument required with option (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")\n";
+var argHelpText = "\nQuoted argument required with this option (e.g., \"Ace of Base\", \"Eraserhead\", \"Everybody (Backstreet's Back)\")\n";
 
 switch ( option ) {
     default:
@@ -76,7 +76,7 @@ function concertThis(artist) {
         if ( body.length === 0 || error || response.statusCode != 200 ) {
             console.log(bandsApiErrorText.green);
             return;
-        }
+        };
 
         var isLocal = true;
         var artistName = body[0].lineup[0];
@@ -100,15 +100,17 @@ function concertThis(artist) {
 }; // End concertThis() definition
 
 function spotifyThis(artist) {
-
+    // show Artist, song title, album title, song preview link
+    // default with no opt is "The Sign" by Ace of Base
 };
 
 function movieThis(movieTitle) {
-    console.log( 'concert-this passed with argument ' + movieTitle );
+    // show title, year, IMDB rating, RT rating, country, language, plot, and actors
+    // default with no opt is "Mr. Nobody"
 };
 
 function doWhatItSays(whatItSays) {
-    console.log( 'do-what-it-says passed with argument ' + whatItSays );
+    // run spotify-this-song on the contents of random.txt
 };
 
 function inputHelp(arg) {
