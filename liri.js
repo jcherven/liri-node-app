@@ -2,6 +2,7 @@ require("dotenv").config();
 
 
 const keys = require('./keys.js');
+var moment = require('moment');
 var colors = require('colors');
 var request = require('request-json');
 var client = request.createClient('http://localhost:8888/');
@@ -58,33 +59,34 @@ switch ( option ) {
 
 function concertThis(artist) {
     var bandsApiErrorText = "There was a little problem getting your concert info.\nPlease try again later, or try a different artist."
+    // Format user's search for query string
     artist = artist.split(' ').join('+');
     var bandsApiQuery = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
 
     client.get(bandsApiQuery, function(error, response, body) {
         if ( typeof body === "undefined" || error || response.statusCode != 200 ) {
-            console.log(bandsApiErrorText);
+            console.log(bandsApiErrorText.green);
         }
         var isLocal = true;
         var artistName = body[0].lineup[0];
         var venueLocal = body[0].venue.name + " in " + body[0].venue.city + ', ' + body[0].venue.region;
         var venueIntl = body[0].venue.name + " in " + body[0].venue.city + ', ' + body[0].venue.country;
-        var date = body[0].datetime;
+        var date =  moment(body[0].datetime).format("MM/DD/YYYY");
 
         // Check if the show is local or international
         if ( body[0].venue.region === "" )
             isLocal = false;
 
         // Render the name of the venue, location, and date of the event in MM/DD/YYYY
-        console.log("\nThe next " + artistName.cyan.bold +  " show's info is:");
-        console.log("On: " + date.yellow.bold);
+        console.log("\nThe next " + artistName.cyan.bold +  " show is:");
+        console.log("\tOn: " + date.yellow.bold);
         if ( isLocal )
-            console.log("At: " + venueLocal.magenta.bold + "\n");
-        else
-            console.log("At: " + venueIntl.magenta.bold + "\n");
-    })
+            console.log("\tAt: " + venueLocal.magenta.bold + "\n");
+        else if ( !isLocal )
+            console.log("\tAt: " + venueIntl.magenta.bold + "\n");
+    });
 
-};
+}; // End concertThis() definition
 
 function spotifyThis(artist) {
     console.log( 'spotify-this-song passed with argument ' + artist );
