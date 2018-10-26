@@ -64,7 +64,7 @@ function concertThis(artist) {
         return;
     };
 
-    var bandsApiErrorText = "\nThere was a little problem getting your concert info.\nPlease try again later, or try a different artist.\n"
+var bandsApiErrorText = "\nThere was a little problem getting your concert info.\nThat artist might not have any shows booked, or the service isn't working right now. Maybe try a different artist, or try again later.\n"
 
     // Format user's search for use in query string
     artist = artist.split(' ').join('+');
@@ -107,6 +107,44 @@ function spotifyThis(artist) {
 function movieThis(movieTitle) {
     // show title, year, IMDB rating, RT rating, country, language, plot, and actors
     // default with no opt is "Mr. Nobody"
+
+    // Missing argument handling
+    if ( !movieTitle ) {
+        movieTitle = "Mr. Nobody";
+    }
+
+    var movieApiErrorText = "\nThere was a little problem getting your movie info.\nMaybe try a different title, or try again later.\n"
+
+    // Format user's search for use in query string
+    movieTitle = movieTitle.split(' ').join('+').split('.').join('');
+    
+    var movieApiQuery = "http://www.omdbapi.com/?apikey=trilogy&t=" + movieTitle;
+
+    // OMDB API request and response
+    client.get(movieApiQuery, function(error, response, body) {
+        if ( body.length === 0 || error || response.statusCode != 200 ) {
+            console.log(movieApiErrorText.green);
+            return;
+        };
+
+        var movieRealTitle = body.Title;
+        var year = body.Year;
+        var imdbRating = body.Ratings[0].Value;
+        var rtRating = body.Ratings[1].Value;
+        var country = body.Country;
+        var language = body.Language;
+        var plot = body.Plot;
+        var actors = body.Actors;
+
+        console.log("\nAccording to OMDB, this is the movie information you wanted.\n".cyan);
+        console.log(movieRealTitle.yellow.bold + " (" + year.yellow + ")" + " starring " + actors.yellow + "\n");
+        console.log("\t" + "Released in: " + country.green.bold + " (" + language.cyan.bold + ")\n");
+        console.log("\tIMDB Rating: " + imdbRating.magenta.bold);
+        console.log("\tRT Rating: " + rtRating.magenta.bold + "\n");
+        console.log("\tPlot: " + plot.blue + "\n");
+
+    }); // End client.get()
+
 };
 
 function doWhatItSays(whatItSays) {
