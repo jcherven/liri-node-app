@@ -1,12 +1,12 @@
 require("dotenv").config();
 
-
+var fs = require("fs");
+var Spotify = require('node-spotify-api'); 
 const keys = require('./keys.js');
 var moment = require('moment');
 var colors = require('colors');
 var request = require('request-json');
 var client = request.createClient('http://localhost:8888/');
-var Spotify = require('node-spotify-api'); 
 var spotify = new Spotify(keys.spotify);
 
 var option = process.argv[2];
@@ -49,7 +49,7 @@ switch ( option ) {
         break;
 
     case 'do-what-it-says':
-        doWhatItSays(argument);
+        doWhatItSays();
         break;
 
     case 'help':
@@ -99,9 +99,30 @@ var bandsApiErrorText = "\nThere was a little problem getting your concert info.
 
 }; // End concertThis() definition
 
-function spotifyThis(artist) {
+function spotifyThis(songTitle) {
     // show Artist, song title, album title, song preview link
     // default with no opt is "The Sign" by Ace of Base
+    if ( !songTitle )
+        songTitle = "The Sign Ace of Base"
+
+    spotify.search({ type: 'track', query: songTitle }, function(error, data) {
+        if ( error ) {
+            return console.log('whoopsie'.red + error);
+        }
+        console.log(data.tracks.items[0].artists[0].name);
+        var artist = data.tracks.items[0].artists[0].name;
+        var title = data.tracks.items[0].name;
+        var albumTitle = data.tracks.items[0].album.name;
+        var preview = data.tracks.items[0].preview_url;
+
+        if ( preview === null )
+            preview = "Track preview is not available";
+        
+        console.log("\nHere's the song formation you requested from Spotify:\n".cyan.bold);
+        console.log("\t" + title.green.bold + " by " + artist.green.bold + "\n");
+        console.log("\tFrom the album " + albumTitle.yellow.bold + "\n");
+        console.log("\tPreview: " + preview.magenta + "\n");
+    })
 };
 
 function movieThis(movieTitle) {
@@ -117,6 +138,7 @@ function movieThis(movieTitle) {
 
     // Format user's search for use in query string
     movieTitle = movieTitle.split(' ').join('+').split('.').join('');
+    console.log(movieTitle);
     
     var movieApiQuery = "http://www.omdbapi.com/?apikey=trilogy&t=" + movieTitle;
 
@@ -147,8 +169,17 @@ function movieThis(movieTitle) {
 
 };
 
-function doWhatItSays(whatItSays) {
+function doWhatItSays() {
     // run spotify-this-song on the contents of random.txt
+    var randomCommand = '';
+    fs.readFile("./random.txt", "utf-8", function(error, data){
+        if ( error )
+            console.log('whoopsie'.red.bold);
+        else
+            randomCommand = data;
+    });
+    console.log(randomCommand);
+    return;
 };
 
 function inputHelp(arg) {
